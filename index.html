@@ -37,13 +37,14 @@
         action="https://script.google.com/macros/s/AKfycbwhf2gaZvnOp6Dw8BkyFNK66hjMH_i3MRwBocLrLw3o-nWRur50exgagQcPDvOcuULZ/exec"
         method="post"
         class="flex flex-col w-3/4 sm:w-1/2 items-left lg:px-20"
+        onsubmit="validateForm(event)"
       >
 
           <label for="name" class="flex-row pt-5">Nombre y Apellido</label>
           <input class="flex-row w-full" type="text" name="name" placeholder="" required />
         
           <label for="attendance" class="flex-row pt-5">¿Asistirás al evento?</label>
-          <select name="attendance" id="attendance" class="flex-row" required>
+          <select name="attendance" id="attendance" class="flex-row" required onchange="toggleRequired()">
             <option value="">Selecciona una opción</option>
             <option value="yes">Sí, asistiré</option>
             <option value="no">No podré</option>
@@ -52,17 +53,53 @@
           <label for="menu" class="flex-row pt-5">Elige tu Menú</label>
           <select name="menu" id="menu" class="flex-row" required>
             <option value="">Selecciona una opción</option>
-            <option value="Omnivoro">Elegido por los Novios</option>
+            <option value="Normal">Elegido por los Novios</option>
             <option value="Veggie">Vegetariano</option>
             <option value="Vegano">Vegano</option>
+            <option value="No asiste">No asistiré</option>
           </select>
           <label for="Alergia" class="flex-row pt-5">¿Tienes alguna restricción o alergia alimentaria?</label>
           <input type="text" name="Alergia" placeholder="" class="flex-row" required />
+
           <label for="Musica" class="flex-row pt-5">¿Qué canción no puede faltar?</label>
-          <input type="text" name="Musica" placeholder="" class="flex-row"/>
+          <input type="text" name="Musica" placeholder="" class="flex-row" notrequired/>
 
           <button type="submit" class="flex-row pt-5 submit-button">Enviar</button>
       </form>
+      <script>
+        function toggleRequired() {
+            var attendance = document.getElementById("attendance").value;
+            var alergiaInput = document.getElementsByName("Alergia")[0];
+            var musicaInput = document.getElementsByName("Musica")[0];
+            var menuSelect = document.getElementById("menu");    
+            if (attendance === "no") {
+                alergiaInput.removeAttribute("required");
+                musicaInput.removeAttribute("required");
+                menuSelect.value = "No asiste";
+
+            } else {
+                alergiaInput.setAttribute("required", "");
+                menuSelect.value = ""
+            }
+        }
+    
+        function validateForm(event) {
+            var attendance = document.getElementById("attendance").value;
+            var alergiaInput = document.getElementsByName("Alergia")[0].value;
+            var musicaInput = document.getElementsByName("Musica")[0].value;
+    
+            if (attendance === "no" && (alergiaInput === "" || musicaInput === "")) {
+                document.getElementsByName("Alergia")[0].value = "No";
+                document.getElementsByName("Musica")[0].value = "No";
+            }
+            if(alergiaInput === ""){
+              document.getElementsByName("Alergia")[0].value = "No";
+            }
+            if(musicaInput === ""){
+              document.getElementsByName("Musica")[0].value = "No";
+            }
+        }
+    </script>
 
     </div>
   </body>
